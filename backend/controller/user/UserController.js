@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 const createUser = async (req, res) => {
 
     const { name, email, password, role } = req.body;
-    const db = req.db
+    const db = req.db;
 
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -44,6 +44,7 @@ const loginUser = async (req, res) => {
         const match = await bcrypt.compare(password, user.password);
 
         if (match) {
+            console.log(results[0]);
             res.status(200).json({ message: 'Login successfully', success: true, user: results[0] });
         } else {
             res.status(401).json({ message: 'Invalid credentials', success: false });

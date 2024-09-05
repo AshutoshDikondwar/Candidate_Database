@@ -4,11 +4,11 @@ const createCandidate = (req, res) => {
 
     const sql = `Insert into candidates (name, email, skills, experience, location, video_results, coding_results) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
-    db.query(sql, [name, email, skills, experience, location, video_results, coding_results], (err, results) => {
+    db.query(sql, [name, email, skills, experience, location, video_results, coding_results], (err, result) => {
         if (err) {
             return res.status(500).json({ message: 'Error adding candidate', success: false });
         }
-        res.status(201).json({ message: "Candidate added successfully", success: true });
+        res.status(201).json({ message: "Candidate added successfully", success: true, candidate: { id: result.insertId, name, email, skills, experience, location, video_results, coding_results } });
     })
 
 }
@@ -18,6 +18,7 @@ const getCandidates = (req, res) => {
     const db = req.db;
 
     let sql = `select * from candidates where 1=1`;
+    console.log("Candidate called");
 
     if (skills) sql += ` and skills LIKE '%${skills}%'`;
     if (experience) sql += ` and experience >= ${experience}`;
@@ -48,7 +49,13 @@ const updateCandidate = async (req, res) => {
         if (err) {
             return res.status(500).json({ message: "Error updating candidate", success: false });
         }
-        res.status(200).json({ message: "Updated candidate successfully", success: true })
+        db.query('select * from candidates where id = ?', [id], (err, updatedCandidate) => {
+            if (err) {
+                return res.status(500).json({ message: "Error fetching updated candidate", success: false });
+            }
+            res.status(200).json({ message: "Updated candidate successfully", success: true, candidate: updatedCandidate[0] });
+        });
+
     })
 }
 
@@ -60,7 +67,7 @@ const deleteCandidate = (req, res) => {
         if (err) {
             return res.status(500).json({ message: "Error deleting candidate", success: false })
         }
-        res.status(200).json({ message: "Candidate deleted successfully", success: true })
+        res.status(200).json({ message: "Candidate deleted successfully", success: true, id: id })
     })
 }
 
