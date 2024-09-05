@@ -5,7 +5,7 @@ export const registerUser = createAsyncThunk(
     'user/register',
     async (userData, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/user', userData);
+            const response = await axios.post('https://candidate-database-backend.onrender.com/api/user', userData);
             return response.data;
 
         } catch (error) {
@@ -18,7 +18,7 @@ export const loginUser = createAsyncThunk(
     'user/login',
     async (userData, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/user/login', userData);
+            const response = await axios.post('https://candidate-database-backend.onrender.com/api/user/login', userData);
             localStorage.setItem('user', JSON.stringify(response.data.user));
             return response.data;
         } catch (error) {

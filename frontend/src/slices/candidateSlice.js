@@ -5,7 +5,7 @@ export const createCandidate = createAsyncThunk(
     'candidate/create',
     async (candidateData, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:5000/api/candidate', candidateData)
+            const response = await axios.post('https://candidate-database-backend.onrender.com/api/candidate', candidateData)
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || 'Error creating candidate');
@@ -18,7 +18,7 @@ export const updateCandidate = createAsyncThunk(
     async (candidateData, { rejectWithValue }) => {
         const { id } = candidateData;
         try {
-            const response = await axios.put(`http://localhost:5000/api/candidate/${id}`, candidateData)
+            const response = await axios.put(`https://candidate-database-backend.onrender.com/api/candidate/${id}`, candidateData)
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || 'Error updating candidate')
@@ -32,7 +32,7 @@ export const getCandidates = createAsyncThunk(
         try {
             console.log("inside get Candidates");
             const { skills, experience, location } = searchCriteria;
-            const response = await axios.get('http://localhost:5000/api/candidate', {
+            const response = await axios.get('https://candidate-database-backend.onrender.com/api/candidate', {
                 params: { skills, experience, location }
             })
             console.log(response);
@@ -47,7 +47,7 @@ export const deleteCandidate = createAsyncThunk(
     'candidate/delete',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await axios.delete(`http://localhost:5000/api/candidate/${id}`);
+            const response = await axios.delete(`https://candidate-database-backend.onrender.com/api/candidate/${id}`);
             return response.data;
 
         } catch (error) {
