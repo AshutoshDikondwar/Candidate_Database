@@ -1,10 +1,10 @@
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useDispatch } from 'react-redux';
-import { createCandidate } from './slices/candidateSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCandidate } from './slices/candidateSlice';
+import { Button } from './components/ui/button';
 import { useNavigate } from 'react-router-dom';
 
 const candidateSchema = z.object({
@@ -17,14 +17,12 @@ const candidateSchema = z.object({
     coding_results: z.string().optional(),
 });
 
-const AddCandidate = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm({
-        resolver: zodResolver(candidateSchema),
-    });
+const EditCandidateModal = ({ candidateId, onClose }) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-
+    const navigate = useNavigate()
+    const { candidates } = useSelector((state) => state.candidate);
     const { isAuthenticated, user } = useSelector((state) => state.user);
+    const candidate = candidates.find(cand => cand.id === candidateId);
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -34,28 +32,47 @@ const AddCandidate = () => {
         }
     }, [isAuthenticated, user, navigate]);
 
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+        resolver: zodResolver(candidateSchema),
+        defaultValues: {
+            name: '',
+            email: '',
+            skills: '',
+            experience: '',
+            location: '',
+            video_results: '',
+            coding_results: '',
+        },
+    });
+
+    useEffect(() => {
+        if (candidate) {
+            setValue('name', candidate.name);
+            setValue('email', candidate.email);
+            setValue('skills', candidate.skills);
+            setValue('experience', candidate.experience);
+            setValue('location', candidate.location);
+            setValue('video_results', candidate.video_results || '');
+            setValue('coding_results', candidate.coding_results || '');
+        }
+    }, [candidate, setValue]);
 
     const onSubmit = async (data) => {
         try {
+
             const formattedSkills = data.skills.trim().toUpperCase();
-
-            const candidateData = {
-                ...data,
-                skills: formattedSkills,
-            };
-            await dispatch(createCandidate(candidateData)).unwrap();
-
-            alert('Candidate added successfully');
-            navigate("/")
+            const candidateData = { ...data, skills: formattedSkills, id: candidateId };
+            await dispatch(updateCandidate(candidateData)).unwrap();
+            onClose();
         } catch (error) {
-            alert('Error adding candidate');
+            alert('Error updating candidate');
         }
     };
 
     return (
-        <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gray-900 p-4">
-            <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto">
-                <h2 className="text-xl font-bold text-white mb-6 text-center">Add Candidate</h2>
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto border border-gray-500">
+                <h2 className="text-xl font-bold text-white mb-6 text-center">Edit Candidate</h2>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -162,16 +179,20 @@ const AddCandidate = () => {
                         </div>
                     </div>
 
-                    <button
+                    <Button
                         type="submit"
-                        className="w-full p-3 bg-blue-600 text-white border border-blue-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-blue-700 text-sm"
+                        className="w-full"
+                        variant="secondary"
                     >
-                        Add Candidate
-                    </button>
+                        Update Candidate
+                    </Button>
+
                 </form>
+
+                <Button onClick={onClose} className="mt-4 w-full">Close</Button>
             </div>
         </div>
     );
 };
 
-export default AddCandidate;
+export default EditCandidateModal;

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCandidates } from './slices/candidateSlice';
+import { useNavigate } from 'react-router-dom';
 import {
     Table,
     TableBody,
@@ -16,7 +17,17 @@ import { Button } from './components/ui/button';
 
 const CandidateTable = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { candidates, loading, error } = useSelector((state) => state.candidate);
+    const { isAuthenticated } = useSelector((state) => state.user);
+
+
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate("/login");
+        }
+    }, [isAuthenticated, navigate]);
 
     const [filters, setFilters] = useState({
         skills: '',
