@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser } from './slices/userSlice';
 import { Button } from './components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link  } from 'react-router-dom';
 import { toast } from 'sonner';
 
 const Login = () => {
@@ -76,6 +76,15 @@ const Login = () => {
                         {loading ? 'Logging in...' : 'Login'}
                     </Button>
                 </form>
+
+                <div className="mt-6 text-center">
+                    <p className="text-gray-300">
+                        Don't have an account?{' '}
+                        <Link to="/register" className="text-blue-500 hover:underline">
+                            Register
+                        </Link>
+                    </p>
+                </div>
 
             </div>
         </div>

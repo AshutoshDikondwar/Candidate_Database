@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from './slices/userSlice';
 import { Button } from './components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
 const Register = () => {
@@ -114,6 +114,16 @@ const Register = () => {
                         {loading ? 'Registering...' : 'Register'}
                     </Button>
                 </form>
+
+                <div className="mt-6 text-center">
+                    <p className="text-gray-300">
+                        Already have an account?{' '}
+                        <Link to="/login" className="text-blue-500 hover:underline">
+                            Login
+                        </Link>
+                    </p>
+                </div>
+                
             </div>
         </div>
     );
