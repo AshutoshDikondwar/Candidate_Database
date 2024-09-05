@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { loginUser } from './slices/userSlice';
 import { Button } from './components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const Login = () => {
-    const { loading, user, error } = useSelector((state) => state.user);
+    const { loading, user, error, isAuthenticated } = useSelector((state) => state.user);
     const dispatch = useDispatch();
-    const navigate=useNavigate()
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -20,8 +21,15 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(loginUser(formData));
-        navigate("/")
+
     };
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/candidates");
+            toast("Logged in successfully")
+        }
+    }, [isAuthenticated, navigate]);
 
     return (
         <div className="flex items-center justify-center h-screen bg-gray-900">

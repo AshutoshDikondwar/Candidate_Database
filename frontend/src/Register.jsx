@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from './slices/userSlice';
 import { Button } from './components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { clearError } from '../src/slices/userSlice';
-
+import { toast } from 'sonner';
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -25,12 +24,13 @@ const Register = () => {
         e.preventDefault();
 
         try {
-            const result = await dispatch(registerUser(formData)).unwrap(); 
+            const result = await dispatch(registerUser(formData)).unwrap();
             if (result) {
                 navigate("/login");
+                toast("User has been registered successfully!")
             }
         } catch (err) {
-            console.error('Registration failed:', err);
+            toast("Oops! Something went wrong while registering user.")
         }
 
 

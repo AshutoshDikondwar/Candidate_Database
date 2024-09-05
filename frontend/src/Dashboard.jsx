@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getCandidates } from './slices/candidateSlice';
 import { deleteCandidate } from './slices/candidateSlice';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import {
   Table,
   TableBody,
@@ -29,11 +30,13 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!isAuthenticated) {
-        navigate("/login");
+      navigate("/login");
+      toast("Please log in to continue")
     } else if (user?.role !== "admin") {
-        navigate("/");
+      navigate("/");
+      toast("Access denied. You are not authorized to view this content.")
     }
-}, [isAuthenticated, user, navigate]);
+  }, [isAuthenticated, user, navigate]);
 
 
   const [filters, setFilters] = useState({

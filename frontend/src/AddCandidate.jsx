@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { useDispatch } from 'react-redux';
 import { createCandidate } from './slices/candidateSlice';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const candidateSchema = z.object({
     name: z.string().nonempty('Name is required'),
@@ -28,8 +29,10 @@ const AddCandidate = () => {
 
     useEffect(() => {
         if (!isAuthenticated) {
+            toast("Please log in to continue")
             navigate("/login");
         } else if (user?.role !== "admin") {
+            toast("Access denied. You are not authorized to view this content.")
             navigate("/");
         }
     }, [isAuthenticated, user, navigate]);
@@ -45,10 +48,10 @@ const AddCandidate = () => {
             };
             await dispatch(createCandidate(candidateData)).unwrap();
 
-            alert('Candidate added successfully');
+            toast("Candidate added successfully!")
             navigate("/")
         } catch (error) {
-            alert('Error adding candidate');
+            toast("Oops! Something went wrong while adding the candidate.");
         }
     };
 

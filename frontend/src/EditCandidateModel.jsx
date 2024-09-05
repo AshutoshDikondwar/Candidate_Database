@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateCandidate } from './slices/candidateSlice';
 import { Button } from './components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const candidateSchema = z.object({
     name: z.string().nonempty('Name is required'),
@@ -26,8 +27,10 @@ const EditCandidateModal = ({ candidateId, onClose }) => {
 
     useEffect(() => {
         if (!isAuthenticated) {
+            toast("Please log in to continue")
             navigate("/login");
         } else if (user?.role !== "admin") {
+            toast("Access denied. You are not authorized to view this content.")
             navigate("/");
         }
     }, [isAuthenticated, user, navigate]);
@@ -64,8 +67,9 @@ const EditCandidateModal = ({ candidateId, onClose }) => {
             const candidateData = { ...data, skills: formattedSkills, id: candidateId };
             await dispatch(updateCandidate(candidateData)).unwrap();
             onClose();
+            toast("Candidate updated successfully!")
         } catch (error) {
-            alert('Error updating candidate');
+            toast("Oops! Something went wrong while updating the candidate.")
         }
     };
 

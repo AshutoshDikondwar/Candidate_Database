@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCandidates } from './slices/candidateSlice';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import {
     Table,
     TableBody,
@@ -26,6 +27,7 @@ const CandidateTable = () => {
     useEffect(() => {
         if (!isAuthenticated) {
             navigate("/login");
+            toast("Please log in to continue.")
         }
     }, [isAuthenticated, navigate]);
 
