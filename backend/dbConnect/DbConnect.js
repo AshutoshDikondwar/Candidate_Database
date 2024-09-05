@@ -1,11 +1,13 @@
 const mysql = require('mysql2')
 
-const connectDB = (host, user, password, database) => {
+const connectDB = (host, user, password, database, port) => {
     const db = mysql.createConnection({
         host,
         user,
         password,
-        database
+        database,
+        port,
+        connectTimeout:10000
     })
     db.connect((err) => {
         if (err) {

@@ -11,13 +11,15 @@ const host = process.env.DB_HOST;
 const user = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
 const database = process.env.DB_NAME;
+const db_port = process.env.DB_PORT;
 const port = process.env.PORT || 4000;
 
 
 app.use(bodyParser.json());
 app.use(cors());
 
-const db = connectDB(host, user, password, database);
+const db = connectDB(host, user, password, database, db_port);
+
 
 app.use((req, res, next) => {
     req.db = db;
