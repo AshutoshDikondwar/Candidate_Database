@@ -7,6 +7,7 @@ import Navbar from './Navbar'
 import Login from './Login'
 import Register from './Register'
 import CandidateTable from './CandidateTable'
+import AddCandidate from './AddCandidate'
 
 
 function App() {
@@ -18,9 +19,10 @@ function App() {
         <Navbar />
         <Routes>
           <Route path='/login' element={<Login />} />
-          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/admin/dashboard' element={<Dashboard />} />
           <Route path='/register' element={<Register/>}/>
           <Route path='/' element={<CandidateTable/>}/>
+          <Route path='/candidate/add' element={<AddCandidate/>}/>
 
         </Routes>
       </BrowserRouter>

@@ -51,7 +51,6 @@ const CandidateTable = () => {
         <div className="p-8">
             <h2 className="text-2xl font-bold text-white mb-4">Candidates</h2>
 
-            {/* Search Form */}
             <form onSubmit={handleSearch} className="mb-4">
                 <div className="flex gap-4">
                     <input

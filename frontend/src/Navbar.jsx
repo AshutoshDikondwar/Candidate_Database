@@ -2,18 +2,20 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../src/slices/userSlice';
+import { Button } from './components/ui/button';
 
 const Navbar = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isAuthenticated } = useSelector(state => state.user);
+    const { isAuthenticated, user } = useSelector(state => state.user);
 
     const handleAuthAction = () => {
         if (isAuthenticated) {
             dispatch(logout());
-            localStorage.removeItem('user'); 
+            localStorage.removeItem('user');
+            navigate("/login")
         } else {
-            navigate('/login'); 
+            navigate('/login');
         }
     };
 
@@ -22,12 +24,20 @@ const Navbar = () => {
             <div className="text-white text-xl font-semibold">
                 MyApp
             </div>
-            <button
-                onClick={handleAuthAction}
-                className="text-white bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded"
-            >
-                {isAuthenticated ? 'Logout' : 'Login'}
-            </button>
+            <div className='flex gap-4'>
+                <Button
+                    onClick={handleAuthAction}
+                    variant="default"
+                >
+                    {isAuthenticated ? 'Logout' : 'Login'}
+                </Button>
+                {isAuthenticated && user.role === 'admin' && <Button
+                    onClick={()=>navigate("/admin/dashboard")}
+                    variant="default"
+                >
+                    Dashboard
+                </Button>}
+            </div>
         </nav>
     );
 };

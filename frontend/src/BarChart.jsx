@@ -15,7 +15,7 @@ const BarChart = ({ data }) => {
 
   const skillCounts = data.reduce((acc, candidate) => {
     candidate.skills.split(',').forEach(skill => {
-      skill = skill.trim();
+      skill = skill.trim().toUpperCase();
       if (acc[skill]) {
         acc[skill]++;
       } else {

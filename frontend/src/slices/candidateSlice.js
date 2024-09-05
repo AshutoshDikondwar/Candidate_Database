@@ -5,7 +5,7 @@ export const createCandidate = createAsyncThunk(
     'candidate/create',
     async (candidateData, { rejectWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:5000/candidate', candidateData)
+            const response = await axios.post('http://localhost:5000/api/candidate', candidateData)
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || 'Error creating candidate');
@@ -47,7 +47,7 @@ export const deleteCandidate = createAsyncThunk(
     'candidate/delete',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await axios.delete(`http://localhost:5000/candidate/${id}`);
+            const response = await axios.delete(`http://localhost:5000/api/candidate/${id}`);
             return response.data;
 
         } catch (error) {
@@ -123,7 +123,8 @@ const candidateSlice = createSlice({
             .addCase(deleteCandidate.fulfilled, (state, action) => {
                 state.loading = false;
                 state.message = action.payload.message
-                state.candidates = state.candidates.filter(cand => cand.id !== action.payload.id);
+                console.log(action.payload);
+                state.candidates = state.candidates.filter(cand => cand.id !== action.meta.arg);
 
             })
             .addCase(deleteCandidate.rejected, (state, action) => {
