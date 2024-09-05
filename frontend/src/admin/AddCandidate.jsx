@@ -1,12 +1,14 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDispatch } from 'react-redux';
-import { createCandidate } from './slices/candidateSlice';
+import { createCandidate } from '../slices/candidateSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { useSelector } from 'react-redux';
+import { Button } from '@/components/ui/button';
 
 const candidateSchema = z.object({
     name: z.string().nonempty('Name is required'),
@@ -54,6 +56,11 @@ const AddCandidate = () => {
             toast("Oops! Something went wrong while adding the candidate.");
         }
     };
+
+    const handleGoBack = () => {
+        navigate(-1); 
+    };
+
 
     return (
         <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gray-900 p-4">
@@ -165,12 +172,21 @@ const AddCandidate = () => {
                         </div>
                     </div>
 
-                    <button
+                    <Button
                         type="submit"
-                        className="w-full p-3 bg-blue-600 text-white border border-blue-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 hover:bg-blue-700 text-sm"
+                        className="w-full"
+                        variant="secondary"
                     >
                         Add Candidate
-                    </button>
+                    </Button>
+
+                    <Button
+                        type="button"
+                        onClick={handleGoBack}
+                        className="w-full mt-4"
+                    >
+                        Go Back
+                    </Button>
                 </form>
             </div>
         </div>

@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateCandidate } from './slices/candidateSlice';
-import { Button } from './components/ui/button';
+import { updateCandidate } from '../slices/candidateSlice';
+import { Button } from '../components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -62,7 +62,6 @@ const EditCandidateModal = ({ candidateId, onClose }) => {
 
     const onSubmit = async (data) => {
         try {
-
             const formattedSkills = data.skills.trim().toUpperCase();
             const candidateData = { ...data, skills: formattedSkills, id: candidateId };
             await dispatch(updateCandidate(candidateData)).unwrap();
@@ -74,8 +73,8 @@ const EditCandidateModal = ({ candidateId, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-            <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto border border-gray-500">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 overflow-y-auto">
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto border border-gray-500 max-h-screen overflow-y-auto">
                 <h2 className="text-xl font-bold text-white mb-6 text-center">Edit Candidate</h2>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
